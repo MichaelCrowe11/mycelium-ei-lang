@@ -1,0 +1,63 @@
+// Simple mycelium cultivation monitoring
+
+environment {
+    temperature: 24.0,
+    humidity: 90.0,
+    co2_level: 800.0
+}
+
+function calculate_growth_factor(temp: float, humidity: float, co2: float) -> float {
+    let temp_factor = 1.0 - abs(temp - 24.0) / 10.0
+    let humidity_factor = 1.0 - abs(humidity - 85.0) / 20.0
+    let co2_factor = min(co2 / 1000.0, 1.0)
+    
+    return temp_factor * humidity_factor * co2_factor
+}
+
+function main() {
+    let growth_rate = 0.0
+    let health_status = 100.0
+    let nutrient_level = 80.0
+    
+    print("Starting mycelium cultivation monitoring...")
+    
+    // Simulation loop
+    for cycle in range(0, 10) {
+        let temp = get_env("temperature")
+        let humidity = get_env("humidity")
+        let co2 = get_env("co2_level")
+        
+        // Calculate growth rate based on environmental factors
+        growth_rate = calculate_growth_factor(temp, humidity, co2)
+        
+        if growth_rate < 0.5 {
+            print("Warning: Sub-optimal growth conditions")
+        }
+        
+        // Update health status
+        health_status = health_status * 0.95 + growth_rate * 10.0
+        
+        // Consume nutrients
+        nutrient_level = nutrient_level - growth_rate * 2.0
+        
+        if nutrient_level < 20.0 {
+            print("Alert: Low nutrients detected")
+        }
+        
+        print("Cycle: ", cycle)
+        print("Growth Rate: ", growth_rate)
+        print("Health Status: ", health_status)
+        print("Nutrient Level: ", nutrient_level)
+        print("---")
+        
+        // Simulate environmental changes
+        if cycle == 5 {
+            set_env("temperature", 26.0)
+            print("Environmental change: Temperature increased to 26°C")
+        }
+        
+        sleep(100)  // 100ms delay
+    }
+    
+    print("Cultivation monitoring complete")
+}

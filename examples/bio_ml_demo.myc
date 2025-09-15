@@ -1,0 +1,60 @@
+// Bio-Inspired Machine Learning Demo
+
+environment {
+    temperature: 22.0,
+    humidity: 80.0,
+    nutrients: 90.0,
+    ph: 6.5
+}
+
+function test_bio_neural_network() {
+    print("=== Testing Biological Neural Network ===")
+    
+    // Create a biological neural network
+    let creation_result = create_bio_network("mycelium_brain", 4, 6, 2)
+    print("Network created:", creation_result)
+    
+    // Train the network with growth patterns
+    print("Training biological network...")
+    let training_result = train_bio_network("mycelium_brain", "growth_pattern", 30)
+    print("Training completed!")
+    print("Training fitness achieved")
+    
+    // Test predictions
+    print("Testing predictions...")
+    
+    let optimal_conditions = [0.5, 0.8, 0.9, 0.1]
+    let prediction1 = predict_bio_network("mycelium_brain", optimal_conditions)
+    print("Optimal conditions prediction completed")
+    
+    let stress_conditions = [-0.8, 0.2, 0.3, -0.5] 
+    let prediction2 = predict_bio_network("mycelium_brain", stress_conditions)
+    print("Stress conditions prediction completed")
+    
+    return true
+}
+
+function compare_ml_approaches() {
+    print("\n=== Comparing Bio-ML Approaches ===")
+    
+    let comparison = compare_bio_ml("growth_pattern")
+    print("Bio-ML comparison completed!")
+    print("Check output above for detailed comparison results")
+    
+    return comparison
+}
+
+function main() {
+    print("=== Bio-Inspired Machine Learning Demo ===")
+    print("Demonstrating biological neural networks for mycelium growth")
+    print("")
+    
+    // Test biological neural network
+    test_bio_neural_network()
+    
+    // Compare different approaches  
+    compare_ml_approaches()
+    
+    print("\n=== Demo Complete ===")
+    print("Bio-inspired machine learning successfully integrated!")
+}

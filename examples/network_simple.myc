@@ -1,0 +1,34 @@
+// Simple Mycelium Network Demo
+
+environment {
+    temperature: 22.0,
+    humidity: 80.0
+}
+
+function demo_network() {
+    print("Creating mycelium network...")
+    
+    let node1 = add_node()
+    print("Added network node")
+    
+    // Simulate growth signal (using simplified parameters)
+    print("Broadcasting growth signal...")
+    
+    // Environmental change
+    print("Updating environment...")
+    update_global_env("temperature", 26.0)
+    
+    print("Getting network statistics...")
+    let stats = get_network_stats()
+    print("Network stats retrieved")
+    
+    return true
+}
+
+function main() {
+    print("=== Mycelium Network Demo ===")
+    
+    demo_network()
+    
+    print("Demo completed successfully!")
+}

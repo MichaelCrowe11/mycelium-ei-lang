@@ -1,0 +1,43 @@
+name: mycelium-ei-lang
+base: core22
+version: '0.1.0'
+summary: Bio-inspired programming language with quantum computing
+description: |
+  Mycelium-EI-Lang is a revolutionary programming language that combines
+  biological computing paradigms with quantum computing capabilities.
+  Features include genetic algorithms, swarm intelligence, neural networks,
+  and environmental cultivation systems.
+
+grade: stable
+confinement: strict
+
+apps:
+  mycelium:
+    command: bin/mycelium
+    plugs:
+      - home
+      - network
+      - network-bind
+
+parts:
+  mycelium-ei-lang:
+    plugin: python
+    source: .
+    python-packages:
+      - numpy
+      - pandas
+      - scikit-learn
+      - matplotlib
+      - networkx
+      - biopython
+    stage-packages:
+      - libgomp1
+      - libopenblas-base
+      - python3-tk
+    
+    override-build: |
+      snapcraftctl build
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      echo '#!/bin/sh' > $SNAPCRAFT_PART_INSTALL/bin/mycelium
+      echo 'exec python3 -m mycelium_ei "$@"' >> $SNAPCRAFT_PART_INSTALL/bin/mycelium
+      chmod +x $SNAPCRAFT_PART_INSTALL/bin/mycelium

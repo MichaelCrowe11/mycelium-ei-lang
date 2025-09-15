@@ -1,0 +1,93 @@
+// Mycelium Network Communication Demo
+
+environment {
+    temperature: 22.0,
+    humidity: 80.0,
+    nutrient_level: 100.0
+}
+
+function create_mycelium_topology() {
+    print("Creating mycelium network topology...")
+    
+    // Create additional nodes
+    let node1 = add_node()
+    let node2 = add_node()
+    let node3 = add_node()
+    
+    print("Nodes created and connected in network")
+    
+    return true
+}
+
+function simulate_growth_cycle() {
+    print("Starting growth cycle simulation...")
+    
+    // Initial growth signal
+    broadcast_signal("growth", {
+        "rate": 0.8,
+        "factor": 1.2,
+        "cycle": 1
+    })
+    
+    sleep(500)
+    
+    // Environmental stress
+    print("Simulating temperature increase...")
+    update_global_env("temperature", 28.0)
+    
+    sleep(300)
+    
+    // Stress response
+    broadcast_signal("stress", {
+        "type": "temperature",
+        "level": 0.7,
+        "source": "environment"
+    })
+    
+    sleep(300)
+    
+    // Nutrient depletion alert
+    update_global_env("nutrient_level", 30.0)
+    
+    broadcast_signal("alert", {
+        "message": "Nutrient levels critically low",
+        "priority": "high",
+        "action_required": true
+    })
+    
+    sleep(300)
+    
+    return true
+}
+
+function monitor_network() {
+    print("Network monitoring active...")
+    
+    let stats = get_network_stats()
+    print("Network Statistics:")
+    print("  Nodes:", stats)
+    
+    return stats
+}
+
+function main() {
+    print("=== Mycelium-EI Network Communication Demo ===")
+    print("")
+    
+    // Setup network topology
+    create_mycelium_topology()
+    
+    sleep(200)
+    
+    // Run growth simulation
+    simulate_growth_cycle()
+    
+    sleep(200)
+    
+    // Monitor network status
+    monitor_network()
+    
+    print("")
+    print("=== Demo Complete ===")
+    print("Network successfully demonstrated bio-inspired communication!")
+}

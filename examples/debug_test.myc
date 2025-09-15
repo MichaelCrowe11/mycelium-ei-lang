@@ -1,0 +1,19 @@
+// Debug test for function calls
+
+environment {
+    temperature: 24.0
+}
+
+function test_function(x: float) -> float {
+    let result = x * 2.0
+    return result
+}
+
+function main() {
+    print("Starting debug test")
+    
+    let value = test_function(5.0)
+    print("Function result:", value)
+    
+    print("Debug test complete")
+}

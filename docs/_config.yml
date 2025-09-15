@@ -1,0 +1,64 @@
+title: Mycelium-EI-Lang
+description: Revolutionary bio-inspired programming language with quantum computing integration
+url: https://michaelcrowe11.github.io/pulsar-lang
+baseurl: ""
+
+# Theme
+theme: minima
+remote_theme: pages-themes/cayman@v0.2.0
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Installation
+    url: /installation
+  - title: Language Reference
+    url: /language-reference
+  - title: API Documentation
+    url: /api
+  - title: Examples
+    url: /examples
+  - title: WebAssembly
+    url: /webassembly
+  - title: Roadmap
+    url: /roadmap
+
+# GitHub integration
+repository: MichaelCrowe11/pulsar-lang
+github:
+  repository_url: https://github.com/MichaelCrowe11/pulsar-lang
+  repository_name: pulsar-lang
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Markdown settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# SEO
+author:
+  name: Michael Benjamin Crowe
+  email: michael.benjamin.crowe@gmail.com
+  
+social:
+  name: Mycelium-EI-Lang
+  links:
+    - https://github.com/MichaelCrowe11/pulsar-lang
+    - https://pypi.org/project/mycelium-ei-lang/
+
+# Additional settings
+show_downloads: true
+google_analytics: # Add your GA tracking ID here
+
+# Custom CSS
+sass:
+  sass_dir: _sass
+  style: compressed

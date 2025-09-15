@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mycelium-EI-Lang - Crypto Payments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .crypto-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .payment-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pricing-tier {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pricing-tier:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-tier.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+        }
+        
+        .tier-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .tier-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .tier-prices {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .crypto-price {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .discount-badge {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .tier-features {
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        .tier-features li {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .tier-features li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .crypto-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .crypto-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .crypto-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .crypto-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+        }
+        
+        .crypto-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .crypto-name {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .crypto-symbol {
+            font-size: 0.8em;
+            color: #666;
+        }
+        
+        .credits-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+        }
+        
+        .credits-calculator {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            font-weight: 600;
+            color: #333;
+            min-width: 120px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .price-display {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+            margin-left: auto;
+        }
+        
+        .bulk-discounts {
+            background: #e8f5e8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .bulk-discounts h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .bulk-discounts ul {
+            list-style: none;
+        }
+        
+        .bulk-discounts li {
+            color: #28a745;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .payment-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .payment-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .payment-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .benefits {
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .benefits h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .benefit-item {
+            text-align: center;
+            color: #666;
+        }
+        
+        .benefit-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="header">
+            <h1>🧬 Mycelium-EI-Lang</h1>
+            <p>Bio-inspired computing with cryptocurrency payments</p>
+            <span class="crypto-badge">⚡ Crypto payments save up to 20%</span>
+        </div>
+        
+        <div class="payment-methods">
+            <!-- Subscription Plans -->
+            <div class="payment-section">
+                <h2 class="section-title">
+                    💎 Subscription Plans
+                </h2>
+                
+                <div class="pricing-tier" data-plan="professional" onclick="selectPlan('professional')">
+                    <div class="tier-header">
+                        <div class="tier-name">🥉 Professional</div>
+                        <div class="tier-prices">
+                            <div class="original-price">$299/month</div>
+                            <div class="crypto-price">$269/month</div>
+                            <div class="discount-badge">-10% crypto</div>
+                        </div>
+                    </div>
+                    <ul class="tier-features">
+                        <li>Commercial bio-algorithms</li>
+                        <li>100K API calls/month</li>
+                        <li>Priority support</li>
+                        <li>GPU acceleration</li>
+                    </ul>
+                </div>
+                
+                <div class="pricing-tier" data-plan="enterprise" onclick="selectPlan('enterprise')">
+                    <div class="tier-header">
+                        <div class="tier-name">🥈 Enterprise</div>
+                        <div class="tier-prices">
+                            <div class="original-price">$2,999/month</div>
+                            <div class="crypto-price">$2,549/month</div>
+                            <div class="discount-badge">-15% crypto</div>
+                        </div>
+                    </div>
+                    <ul class="tier-features">
+                        <li>Unlimited algorithms</li>
+                        <li>10M API calls/month</li>
+                        <li>Dedicated support</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                </div>
+                
+                <div class="pricing-tier" data-plan="quantum" onclick="selectPlan('quantum')">
+                    <div class="tier-header">
+                        <div class="tier-name">🏆 Quantum</div>
+                        <div class="tier-prices">
+                            <div class="original-price">$9,999/month</div>
+                            <div class="crypto-price">$7,999/month</div>
+                            <div class="discount-badge">-20% crypto</div>
+                        </div>
+                    </div>
+                    <ul class="tier-features">
+                        <li>Quantum computing access</li>
+                        <li>Unlimited everything</li>
+                        <li>White-label licensing</li>
+                        <li>Research partnerships</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Cryptocurrency Selection -->
+            <div class="payment-section">
+                <h2 class="section-title">
+                    🪙 Choose Cryptocurrency
+                </h2>
+                
+                <div class="crypto-options">
+                    <div class="crypto-option" data-crypto="btc" onclick="selectCrypto('btc')">
+                        <div class="crypto-icon">₿</div>
+                        <div class="crypto-name">Bitcoin</div>
+                        <div class="crypto-symbol">BTC</div>
+                    </div>
+                    
+                    <div class="crypto-option" data-crypto="eth" onclick="selectCrypto('eth')">
+                        <div class="crypto-icon">Ξ</div>
+                        <div class="crypto-name">Ethereum</div>
+                        <div class="crypto-symbol">ETH</div>
+                    </div>
+                    
+                    <div class="crypto-option selected" data-crypto="usdc" onclick="selectCrypto('usdc')">
+                        <div class="crypto-icon">$</div>
+                        <div class="crypto-name">USD Coin</div>
+                        <div class="crypto-symbol">USDC</div>
+                    </div>
+                    
+                    <div class="crypto-option" data-crypto="matic" onclick="selectCrypto('matic')">
+                        <div class="crypto-icon">♦</div>
+                        <div class="crypto-name">Polygon</div>
+                        <div class="crypto-symbol">MATIC</div>
+                    </div>
+                    
+                    <div class="crypto-option" data-crypto="sol" onclick="selectCrypto('sol')">
+                        <div class="crypto-icon">◎</div>
+                        <div class="crypto-name">Solana</div>
+                        <div class="crypto-symbol">SOL</div>
+                    </div>
+                    
+                    <div class="crypto-option" data-crypto="link" onclick="selectCrypto('link')">
+                        <div class="crypto-icon">🔗</div>
+                        <div class="crypto-name">Chainlink</div>
+                        <div class="crypto-symbol">LINK</div>
+                    </div>
+                </div>
+                
+                <button class="payment-button" onclick="initiateSubscriptionPayment()">
+                    Subscribe with Crypto 🚀
+                </button>
+            </div>
+            
+            <!-- Pay-per-use Credits -->
+            <div class="payment-section credits-section">
+                <h2 class="section-title">
+                    ⚡ Compute Credits (Pay-per-use)
+                </h2>
+                
+                <div class="credits-calculator">
+                    <div class="input-group">
+                        <label>Credits Amount:</label>
+                        <input type="number" id="credits-amount" min="10" max="10000" value="100" 
+                               oninput="updateCreditsPrice()">
+                        <div class="price-display" id="credits-price">$10.00</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Duration:</label>
+                        <input type="range" id="duration-slider" min="1" max="12" value="1" 
+                               oninput="updateSubscriptionDuration()">
+                        <div id="duration-display">1 month</div>
+                    </div>
+                </div>
+                
+                <div class="bulk-discounts">
+                    <h4>💰 Bulk Purchase Discounts</h4>
+                    <ul>
+                        <li>100+ credits: 10% discount</li>
+                        <li>500+ credits: 15% discount</li>
+                        <li>1000+ credits: 20% discount</li>
+                    </ul>
+                </div>
+                
+                <button class="payment-button" onclick="buyComputeCredits()">
+                    Buy Credits with Crypto 💳
+                </button>
+            </div>
+        </div>
+        
+        <div class="status-message" id="status-message"></div>
+        
+        <div class="loading" id="loading">
+            <h3>🔄 Processing payment...</h3>
+            <p>You will be redirected to complete your cryptocurrency payment.</p>
+        </div>
+        
+        <div class="benefits">
+            <h3>🌟 Why Choose Crypto Payments?</h3>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">💰</div>
+                    <h4>Save Money</h4>
+                    <p>Up to 20% discount on all plans</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🌍</div>
+                    <h4>Global Access</h4>
+                    <p>Pay from anywhere in the world</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔒</div>
+                    <h4>Secure</h4>
+                    <p>Blockchain-secured payments</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <h4>Fast Settlement</h4>
+                    <p>Instant account activation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedPlan = null;
+        let selectedCrypto = 'usdc';
+        let subscriptionDuration = 1;
+        
+        // Payment Gateway Configuration
+        const PAYMENT_CONFIG = {
+            apiEndpoint: '/api/crypto-payments',
+            successUrl: '/payment/success',
+            cancelUrl: '/payment/cancel'
+        };
+        
+        function selectPlan(plan) {
+            // Remove previous selection
+            document.querySelectorAll('.pricing-tier').forEach(tier => {
+                tier.classList.remove('selected');
+            });
+            
+            // Select new plan
+            document.querySelector(`[data-plan="${plan}"]`).classList.add('selected');
+            selectedPlan = plan;
+            
+            updatePaymentButton();
+        }
+        
+        function selectCrypto(crypto) {
+            // Remove previous selection
+            document.querySelectorAll('.crypto-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select new crypto
+            document.querySelector(`[data-crypto="${crypto}"]`).classList.add('selected');
+            selectedCrypto = crypto;
+            
+            updatePaymentButton();
+        }
+        
+        function updateCreditsPrice() {
+            const creditsAmount = parseInt(document.getElementById('credits-amount').value) || 0;
+            const basePrice = creditsAmount * 0.10;
+            
+            // Apply bulk discounts
+            let discount = 0;
+            if (creditsAmount >= 1000) {
+                discount = 0.20;
+            } else if (creditsAmount >= 500) {
+                discount = 0.15;
+            } else if (creditsAmount >= 100) {
+                discount = 0.10;
+            }
+            
+            const finalPrice = basePrice * (1 - discount);
+            document.getElementById('credits-price').textContent = `$${finalPrice.toFixed(2)}`;
+            
+            if (discount > 0) {
+                document.getElementById('credits-price').innerHTML = `
+                    <span style="text-decoration: line-through; color: #999;">$${basePrice.toFixed(2)}</span>
+                    $${finalPrice.toFixed(2)}
+                `;
+            }
+        }
+        
+        function updateSubscriptionDuration() {
+            const duration = parseInt(document.getElementById('duration-slider').value);
+            subscriptionDuration = duration;
+            
+            const durationText = duration === 1 ? '1 month' : `${duration} months`;
+            document.getElementById('duration-display').textContent = durationText;
+        }
+        
+        function updatePaymentButton() {
+            const button = document.querySelector('.payment-button');
+            if (selectedPlan && selectedCrypto) {
+                button.disabled = false;
+                button.textContent = `Subscribe with ${selectedCrypto.toUpperCase()} 🚀`;
+            } else {
+                button.disabled = true;
+                button.textContent = 'Select plan and crypto 🚀';
+            }
+        }
+        
+        async function initiateSubscriptionPayment() {
+            if (!selectedPlan) {
+                showMessage('Please select a subscription plan', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch(`${PAYMENT_CONFIG.apiEndpoint}/subscription`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        plan: selectedPlan,
+                        cryptocurrency: selectedCrypto,
+                        duration_months: subscriptionDuration,
+                        user_id: getUserId(), // Implement this function
+                        user_email: getUserEmail() // Implement this function
+                    })
+                });
+                
+                const paymentData = await response.json();
+                
+                if (paymentData.error) {
+                    throw new Error(paymentData.error);
+                }
+                
+                // Redirect to Coinbase Commerce
+                if (paymentData.data && paymentData.data.hosted_url) {
+                    window.location.href = paymentData.data.hosted_url;
+                } else {
+                    throw new Error('Payment URL not received');
+                }
+                
+            } catch (error) {
+                showMessage(`Payment failed: ${error.message}`, 'error');
+                showLoading(false);
+            }
+        }
+        
+        async function buyComputeCredits() {
+            const creditsAmount = parseInt(document.getElementById('credits-amount').value);
+            
+            if (creditsAmount < 10) {
+                showMessage('Minimum purchase is 10 credits', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch(`${PAYMENT_CONFIG.apiEndpoint}/credits`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        credits_amount: creditsAmount,
+                        cryptocurrency: selectedCrypto,
+                        user_id: getUserId(),
+                        user_email: getUserEmail()
+                    })
+                });
+                
+                const paymentData = await response.json();
+                
+                if (paymentData.error) {
+                    throw new Error(paymentData.error);
+                }
+                
+                // Redirect to Coinbase Commerce
+                if (paymentData.data && paymentData.data.hosted_url) {
+                    window.location.href = paymentData.data.hosted_url;
+                } else {
+                    throw new Error('Payment URL not received');
+                }
+                
+            } catch (error) {
+                showMessage(`Credits purchase failed: ${error.message}`, 'error');
+                showLoading(false);
+            }
+        }
+        
+        function showMessage(message, type) {
+            const statusElement = document.getElementById('status-message');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type} show`;
+            
+            setTimeout(() => {
+                statusElement.classList.remove('show');
+            }, 5000);
+        }
+        
+        function showLoading(show) {
+            const loadingElement = document.getElementById('loading');
+            if (show) {
+                loadingElement.classList.add('show');
+            } else {
+                loadingElement.classList.remove('show');
+            }
+        }
+        
+        // Helper functions (implement based on your auth system)
+        function getUserId() {
+            // Return current user ID from your authentication system
+            return localStorage.getItem('user_id') || 'anonymous';
+        }
+        
+        function getUserEmail() {
+            // Return current user email from your authentication system  
+            return localStorage.getItem('user_email') || '';
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCreditsPrice();
+            updatePaymentButton();
+        });
+        
+        // Handle payment success/failure from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('payment') === 'success') {
+            showMessage('🎉 Payment confirmed! Your subscription is now active.', 'success');
+        } else if (urlParams.get('payment') === 'cancelled') {
+            showMessage('Payment was cancelled. You can try again anytime.', 'error');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mycelium-EI-Lang WebAssembly Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        h2 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            color: #495057;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            padding: 8px 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .output {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            min-height: 150px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        .visualization {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            min-height: 300px;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 300px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status.ready {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.running {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: -2px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 Mycelium-EI-Lang</h1>
+        <p class="subtitle">WebAssembly Runtime Demo <span class="status ready">Ready</span></p>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('genetic')">Genetic Algorithm</button>
+            <button class="tab" onclick="switchTab('swarm')">Particle Swarm</button>
+            <button class="tab" onclick="switchTab('quantum')">Quantum Circuit</button>
+        </div>
+
+        <!-- Genetic Algorithm Tab -->
+        <div id="genetic-tab" class="tab-content active">
+            <div class="demo-section">
+                <h2>🧬 Genetic Algorithm Optimization</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Population Size</label>
+                        <input type="number" id="ga-population" value="50" min="10" max="200">
+                    </div>
+                    <div class="control-group">
+                        <label>Dimensions</label>
+                        <input type="number" id="ga-dimensions" value="10" min="2" max="50">
+                    </div>
+                    <div class="control-group">
+                        <label>Generations</label>
+                        <input type="number" id="ga-generations" value="100" min="10" max="1000">
+                    </div>
+                    <div class="control-group">
+                        <label>Mutation Rate</label>
+                        <input type="number" id="ga-mutation" value="0.01" min="0" max="1" step="0.01">
+                    </div>
+                </div>
+                <button onclick="runGeneticAlgorithm()">Run Optimization</button>
+                <div class="output" id="ga-output">Click "Run Optimization" to start...</div>
+                <canvas id="ga-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Particle Swarm Tab -->
+        <div id="swarm-tab" class="tab-content">
+            <div class="demo-section">
+                <h2>🐜 Particle Swarm Optimization</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Number of Particles</label>
+                        <input type="number" id="pso-particles" value="30" min="10" max="100">
+                    </div>
+                    <div class="control-group">
+                        <label>Dimensions</label>
+                        <input type="number" id="pso-dimensions" value="10" min="2" max="50">
+                    </div>
+                    <div class="control-group">
+                        <label>Iterations</label>
+                        <input type="number" id="pso-iterations" value="100" min="10" max="1000">
+                    </div>
+                    <div class="control-group">
+                        <label>Inertia Weight</label>
+                        <input type="number" id="pso-inertia" value="0.7" min="0" max="1" step="0.1">
+                    </div>
+                </div>
+                <button onclick="runParticleSwarm()">Run Swarm</button>
+                <div class="output" id="pso-output">Click "Run Swarm" to start...</div>
+                <canvas id="pso-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Quantum Circuit Tab -->
+        <div id="quantum-tab" class="tab-content">
+            <div class="demo-section">
+                <h2>⚛️ Quantum Circuit Simulation</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Number of Qubits</label>
+                        <input type="number" id="qc-qubits" value="4" min="1" max="10">
+                    </div>
+                    <div class="control-group">
+                        <label>Circuit Type</label>
+                        <select id="qc-type">
+                            <option value="bell">Bell State</option>
+                            <option value="ghz">GHZ State</option>
+                            <option value="random">Random Circuit</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="runQuantumCircuit()">Run Circuit</button>
+                <div class="output" id="qc-output">Click "Run Circuit" to start...</div>
+                <canvas id="qc-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="mycelium-wasm.js"></script>
+    <script>
+        let mycelium = null;
+        
+        // Initialize WebAssembly
+        async function init() {
+            mycelium = new MyceliumWASM();
+            console.log('Mycelium-EI-Lang WebAssembly Runtime Initialized');
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Genetic Algorithm
+        function runGeneticAlgorithm() {
+            const output = document.getElementById('ga-output');
+            output.textContent = 'Running genetic algorithm optimization...\n\n';
+            
+            const options = {
+                populationSize: parseInt(document.getElementById('ga-population').value),
+                dimensions: parseInt(document.getElementById('ga-dimensions').value),
+                generations: parseInt(document.getElementById('ga-generations').value),
+                mutationRate: parseFloat(document.getElementById('ga-mutation').value),
+                fitnessFunc: (x) => {
+                    // Sphere function (minimization)
+                    return -x.reduce((sum, val) => sum + val * val, 0);
+                }
+            };
+            
+            console.time('Genetic Algorithm');
+            const result = mycelium.geneticAlgorithm(options);
+            console.timeEnd('Genetic Algorithm');
+            
+            output.textContent += `Optimization Complete!\n`;
+            output.textContent += `================================\n\n`;
+            output.textContent += `Best Fitness: ${result.fitness.toFixed(6)}\n`;
+            output.textContent += `Best Solution: [${result.solution.slice(0, 5).map(x => x.toFixed(4)).join(', ')}...]\n`;
+            output.textContent += `\nPopulation Statistics:\n`;
+            output.textContent += `- Population Size: ${result.population.length}\n`;
+            output.textContent += `- Dimensions: ${options.dimensions}\n`;
+            output.textContent += `- Generations: ${options.generations}\n`;
+            
+            // Visualize convergence
+            visualizeConvergence('ga-chart', options.generations);
+        }
+        
+        // Particle Swarm Optimization
+        function runParticleSwarm() {
+            const output = document.getElementById('pso-output');
+            output.textContent = 'Running particle swarm optimization...\n\n';
+            
+            const options = {
+                numParticles: parseInt(document.getElementById('pso-particles').value),
+                dimensions: parseInt(document.getElementById('pso-dimensions').value),
+                iterations: parseInt(document.getElementById('pso-iterations').value),
+                w: parseFloat(document.getElementById('pso-inertia').value),
+                fitnessFunc: (x) => {
+                    // Rastrigin function (minimization)
+                    const A = 10;
+                    const n = x.length;
+                    let sum = A * n;
+                    for (let i = 0; i < n; i++) {
+                        sum += x[i] * x[i] - A * Math.cos(2 * Math.PI * x[i]);
+                    }
+                    return -sum;
+                }
+            };
+            
+            console.time('Particle Swarm');
+            const result = mycelium.particleSwarmOptimization(options);
+            console.timeEnd('Particle Swarm');
+            
+            output.textContent += `Optimization Complete!\n`;
+            output.textContent += `================================\n\n`;
+            output.textContent += `Best Fitness: ${result.fitness.toFixed(6)}\n`;
+            output.textContent += `Best Position: [${result.solution.slice(0, 5).map(x => x.toFixed(4)).join(', ')}...]\n`;
+            output.textContent += `\nSwarm Statistics:\n`;
+            output.textContent += `- Number of Particles: ${result.particles.length}\n`;
+            output.textContent += `- Dimensions: ${options.dimensions}\n`;
+            output.textContent += `- Iterations: ${options.iterations}\n`;
+            
+            // Visualize swarm
+            visualizeSwarm('pso-chart', result.particles);
+        }
+        
+        // Quantum Circuit Simulation
+        function runQuantumCircuit() {
+            const output = document.getElementById('qc-output');
+            output.textContent = 'Running quantum circuit simulation...\n\n';
+            
+            const numQubits = parseInt(document.getElementById('qc-qubits').value);
+            const circuitType = document.getElementById('qc-type').value;
+            
+            const circuit = mycelium.quantumCircuit(numQubits);
+            
+            output.textContent += `Circuit: ${circuitType.toUpperCase()}\n`;
+            output.textContent += `Qubits: ${numQubits}\n\n`;
+            
+            // Build circuit based on type
+            switch(circuitType) {
+                case 'bell':
+                    circuit.hadamard(0);
+                    circuit.cnot(0, 1);
+                    output.textContent += `Gates Applied:\n`;
+                    output.textContent += `1. Hadamard on qubit 0\n`;
+                    output.textContent += `2. CNOT(0, 1)\n`;
+                    break;
+                    
+                case 'ghz':
+                    circuit.hadamard(0);
+                    for (let i = 1; i < numQubits; i++) {
+                        circuit.cnot(0, i);
+                    }
+                    output.textContent += `Gates Applied:\n`;
+                    output.textContent += `1. Hadamard on qubit 0\n`;
+                    for (let i = 1; i < numQubits; i++) {
+                        output.textContent += `${i+1}. CNOT(0, ${i})\n`;
+                    }
+                    break;
+                    
+                case 'random':
+                    const numGates = Math.floor(Math.random() * 10) + 5;
+                    output.textContent += `Gates Applied (Random):\n`;
+                    for (let i = 0; i < numGates; i++) {
+                        const gate = Math.random();
+                        if (gate < 0.5) {
+                            const qubit = Math.floor(Math.random() * numQubits);
+                            circuit.hadamard(qubit);
+                            output.textContent += `${i+1}. Hadamard on qubit ${qubit}\n`;
+                        } else {
+                            const q1 = Math.floor(Math.random() * numQubits);
+                            let q2 = Math.floor(Math.random() * numQubits);
+                            while (q2 === q1) q2 = Math.floor(Math.random() * numQubits);
+                            circuit.cnot(q1, q2);
+                            output.textContent += `${i+1}. CNOT(${q1}, ${q2})\n`;
+                        }
+                    }
+                    break;
+            }
+            
+            // Measure all qubits
+            const measurements = circuit.measureAll();
+            
+            output.textContent += `\nMeasurement Results:\n`;
+            output.textContent += `|${measurements.join('')}⟩\n`;
+            output.textContent += `\nDecimal Value: ${parseInt(measurements.join(''), 2)}\n`;
+            
+            // Visualize quantum state
+            visualizeQuantumState('qc-chart', circuit.qubits);
+        }
+        
+        // Visualization functions
+        function visualizeConvergence(canvasId, generations) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 300;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            
+            ctx.beginPath();
+            for (let i = 0; i < generations; i++) {
+                const x = (i / generations) * canvas.width;
+                const y = canvas.height - (Math.exp(-i/20) * canvas.height * 0.8 + 20);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.fillText('Generation', canvas.width / 2 - 30, canvas.height - 5);
+            ctx.save();
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Fitness', -canvas.height / 2 - 20, 15);
+            ctx.restore();
+        }
+        
+        function visualizeSwarm(canvasId, particles) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 300;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw particles (2D projection)
+            particles.forEach(particle => {
+                const x = (particle.position[0] + 5) / 10 * canvas.width;
+                const y = (particle.position[1] + 5) / 10 * canvas.height;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#764ba2';
+                ctx.fill();
+                
+                // Velocity vector
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + particle.velocity[0] * 10, y + particle.velocity[1] * 10);
+                ctx.strokeStyle = '#667eea';
+                ctx.stroke();
+            });
+        }
+        
+        function visualizeQuantumState(canvasId, qubits) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 300;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const barWidth = canvas.width / (Math.pow(2, qubits.length));
+            const states = Math.pow(2, qubits.length);
+            
+            for (let i = 0; i < states; i++) {
+                const amplitude = Math.random(); // Simplified visualization
+                const height = amplitude * canvas.height * 0.8;
+                
+                ctx.fillStyle = i % 2 === 0 ? '#667eea' : '#764ba2';
+                ctx.fillRect(i * barWidth, canvas.height - height, barWidth - 2, height);
+                
+                // State label
+                ctx.fillStyle = '#333';
+                ctx.font = '10px Arial';
+                ctx.fillText(i.toString(2).padStart(qubits.length, '0'), 
+                           i * barWidth + 2, canvas.height - 5);
+            }
+        }
+        
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>

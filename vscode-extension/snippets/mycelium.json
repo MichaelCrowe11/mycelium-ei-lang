@@ -1,0 +1,118 @@
+{
+  "Environment Block": {
+    "prefix": "env",
+    "body": [
+      "environment {",
+      "\ttemperature: ${1:24.0},",
+      "\thumidity: ${2:85.0},",
+      "\tnutrients: ${3:100.0},",
+      "\tph: ${4:6.5}",
+      "}"
+    ],
+    "description": "Create an environment configuration block"
+  },
+  "Function": {
+    "prefix": "func",
+    "body": [
+      "function ${1:name}(${2:params}) {",
+      "\t${3:// body}",
+      "\treturn ${4:result}",
+      "}"
+    ],
+    "description": "Create a function"
+  },
+  "Main Function": {
+    "prefix": "main",
+    "body": [
+      "function main() {",
+      "\tprint(\"${1:Starting Mycelium-EI program...}\")",
+      "\t${2:// main logic}",
+      "}"
+    ],
+    "description": "Create main function"
+  },
+  "Genetic Optimization": {
+    "prefix": "genetic",
+    "body": [
+      "let result = genetic_optimize(",
+      "\t\"${1:fitness_function}\",",
+      "\t${2:6}, // dimensions",
+      "\t${3:50}, // population size",
+      "\t${4:100} // generations",
+      ")"
+    ],
+    "description": "Run genetic algorithm optimization"
+  },
+  "Swarm Optimization": {
+    "prefix": "swarm",
+    "body": [
+      "let result = swarm_optimize(",
+      "\t\"${1:fitness_function}\",",
+      "\t${2:6}, // dimensions",
+      "\t${3:30}, // particles",
+      "\t${4:100} // iterations",
+      ")"
+    ],
+    "description": "Run particle swarm optimization"
+  },
+  "Create Neural Network": {
+    "prefix": "neural",
+    "body": [
+      "create_bio_network(",
+      "\t\"${1:network_id}\",",
+      "\t${2:4}, // input size",
+      "\t${3:8}, // hidden size",
+      "\t${4:2} // output size",
+      ")"
+    ],
+    "description": "Create biological neural network"
+  },
+  "Cultivation System": {
+    "prefix": "cultivation",
+    "body": [
+      "create_cultivation(\"${1:batch_id}\")",
+      "monitor_cultivation(\"${1:batch_id}\")",
+      "let health = get_cultivation_health(\"${1:batch_id}\")",
+      "optimize_cultivation(\"${1:batch_id}\")"
+    ],
+    "description": "Set up cultivation monitoring"
+  },
+  "Quantum Entanglement": {
+    "prefix": "quantum",
+    "body": [
+      "let network = create_quantum_network(\"${1:network_id}\", ${2:8})",
+      "quantum_entangle(network, \"${3:node1}\", \"${4:node2}\")",
+      "let result = quantum_measure(network, \"${3:node1}\")"
+    ],
+    "description": "Create quantum entanglement"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:items} {",
+      "\t${3:// body}",
+      "}"
+    ],
+    "description": "For loop"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition} {",
+      "\t${2:// body}",
+      "}"
+    ],
+    "description": "While loop"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} {",
+      "\t${2:// then}",
+      "} else {",
+      "\t${3:// else}",
+      "}"
+    ],
+    "description": "If-else statement"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Mycelium Payment Gateway",
+  "description": "Cryptocurrency payment processing for Mycelium-EI-Lang platform",
+  "repository": "https://github.com/MichaelCrowe11/pulsar-lang",
+  "logo": "https://raw.githubusercontent.com/MichaelCrowe11/pulsar-lang/main/docs/assets/logo.png",
+  "keywords": ["payments", "cryptocurrency", "bio-computing", "python", "fastapi"],
+  "stack": "heroku-20",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "COINBASE_API_KEY": {
+      "description": "Coinbase Commerce API Key for payment processing",
+      "required": true
+    },
+    "COINBASE_WEBHOOK_SECRET": {
+      "description": "Coinbase Commerce Webhook Secret for signature verification",
+      "required": true
+    },
+    "JWT_SECRET_KEY": {
+      "description": "JWT Secret Key for authentication",
+      "generator": "secret"
+    },
+    "API_SECRET_KEY": {
+      "description": "API Secret Key for internal services",
+      "generator": "secret"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:mini",
+      "as": "DATABASE"
+    },
+    {
+      "plan": "heroku-redis:mini",
+      "as": "REDIS"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "python -c \"print('Mycelium Payment Gateway deployed successfully!')\""
+  }
+}

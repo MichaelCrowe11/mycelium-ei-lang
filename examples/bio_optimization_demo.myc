@@ -1,0 +1,119 @@
+// Bio-Algorithm Optimization Demo
+// Demonstrates genetic algorithms, swarm intelligence, and ant colony optimization
+
+environment {
+    temperature: 22.0,
+    humidity: 80.0,
+    nutrients: 100.0,
+    ph: 6.5,
+    light: 50.0,
+    co2: 400.0
+}
+
+function mycelium_fitness(temp, humidity, nutrients, ph, light, co2) {
+    // Optimal growth function for mycelium
+    let temp_opt = 1.0 - abs(temp) / 10.0
+    let humidity_opt = 1.0 - abs(humidity) / 5.0
+    let nutrient_factor = nutrients / 2.0
+    let ph_opt = 1.0 - abs(ph) / 3.0
+    let light_factor = light / 3.0
+    let co2_factor = co2 / 2.0
+    
+    return temp_opt * humidity_opt * nutrient_factor * ph_opt * light_factor * co2_factor
+}
+
+function test_genetic_algorithm() {
+    print("=== Testing Genetic Algorithm ===")
+    
+    let result = genetic_optimize("mycelium_fitness", 6, 30, 50)
+    
+    print("Genetic Algorithm Results:")
+    print("  Best fitness:", result.fitness)
+    print("  Generations:", result.generations) 
+    print("  Time:", result.time, "seconds")
+    print("  Optimal conditions:")
+    print("    Temperature:", result.solution[0])
+    print("    Humidity:", result.solution[1])
+    print("    Nutrients:", result.solution[2])
+    print("    pH:", result.solution[3])
+    print("    Light:", result.solution[4])
+    print("    CO2:", result.solution[5])
+    
+    return result
+}
+
+function test_swarm_optimization() {
+    print("\n=== Testing Particle Swarm Optimization ===")
+    
+    let result = swarm_optimize("mycelium_fitness", 6, 20, 50)
+    
+    print("PSO Results:")
+    print("  Best fitness:", result.fitness)
+    print("  Iterations:", result.iterations)
+    print("  Time:", result.time, "seconds")
+    print("  Optimal conditions:")
+    print("    Temperature:", result.solution[0])
+    print("    Humidity:", result.solution[1])
+    print("    Nutrients:", result.solution[2])
+    print("    pH:", result.solution[3])
+    print("    Light:", result.solution[4])
+    print("    CO2:", result.solution[5])
+    
+    return result
+}
+
+function test_ant_colony() {
+    print("\n=== Testing Ant Colony Optimization ===")
+    
+    let result = ant_optimize("mycelium_fitness", 6, 15, 30)
+    
+    print("ACO Results:")
+    print("  Best fitness:", result.fitness)
+    print("  Iterations:", result.iterations)
+    print("  Time:", result.time, "seconds")
+    print("  Optimal conditions:")
+    print("    Temperature:", result.solution[0])
+    print("    Humidity:", result.solution[1])
+    print("    Nutrients:", result.solution[2])
+    print("    pH:", result.solution[3])
+    print("    Light:", result.solution[4])
+    print("    CO2:", result.solution[5])
+    
+    return result
+}
+
+function compare_bio_algorithms() {
+    print("\n=== Comparing All Bio-Algorithms ===")
+    
+    let comparison = bio_compare("mycelium_fitness", 6)
+    
+    print("Algorithm Comparison Results:")
+    for algo in ["genetic", "pso", "aco"] {
+        print("  " + algo + ":")
+        if comparison[algo].error {
+            print("    Error:", comparison[algo].error)
+        } else {
+            print("    Fitness:", comparison[algo].fitness)
+            print("    Time:", comparison[algo].time, "seconds")
+        }
+    }
+    
+    return comparison
+}
+
+function main() {
+    print("=== Mycelium Bio-Algorithm Optimization Demo ===")
+    print("Optimizing mycelium growth conditions using bio-inspired algorithms")
+    print("")
+    
+    // Test individual algorithms
+    let genetic_result = test_genetic_algorithm()
+    let swarm_result = test_swarm_optimization()  
+    let ant_result = test_ant_colony()
+    
+    // Compare all algorithms
+    let comparison = compare_bio_algorithms()
+    
+    print("\n=== Demo Complete ===")
+    print("Bio-inspired optimization successfully integrated with mycelium network!")
+}

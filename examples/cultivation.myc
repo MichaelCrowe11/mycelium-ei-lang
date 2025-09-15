@@ -1,0 +1,95 @@
+// Mycelium cultivation monitoring system
+
+environment {
+    temperature: 24.0,
+    humidity: 90.0,
+    co2_level: 800.0,
+    light_intensity: 200.0
+}
+
+mycelium CultivationNetwork {
+    signal growth_rate: float = 0.0
+    signal health_status: float = 100.0
+    signal nutrient_level: float = 80.0
+    
+    network substrate_connections {
+        nodes: 1024,
+        density: 0.75
+    }
+    
+    function monitor_growth() {
+        let temp = get_env("temperature")
+        let humidity = get_env("humidity")
+        let co2 = get_env("co2_level")
+        
+        // Calculate growth rate based on environmental factors
+        growth_rate = calculate_growth_factor(temp, humidity, co2)
+        
+        if growth_rate < 0.5 {
+            adapt_environment()
+        }
+        
+        // Update health status
+        health_status = health_status * 0.95 + (growth_rate * 10.0)
+        
+        // Consume nutrients
+        nutrient_level = nutrient_level - (growth_rate * 2.0)
+        
+        if nutrient_level < 20.0 {
+            signal_alert("Low nutrients detected")
+        }
+    }
+    
+    function calculate_growth_factor(temp: float, humidity: float, co2: float) -> float {
+        let temp_factor = 1.0 - abs(temp - 24.0) / 10.0
+        let humidity_factor = 1.0 - abs(humidity - 85.0) / 20.0
+        let co2_factor = min(co2 / 1000.0, 1.0)
+        
+        return (temp_factor * humidity_factor * co2_factor)
+    }
+    
+    adapt function adjust_to_environment() {
+        let current_temp = get_env("temperature")
+        
+        if current_temp < 20.0 || current_temp > 28.0 {
+            // Activate stress response
+            signal_network("stress_response", true)
+            growth_rate = growth_rate * 0.5
+        } else {
+            signal_network("stress_response", false)
+        }
+    }
+    
+    function propagate_signal(signal_type: string, value: float) {
+        for node in substrate_connections {
+            node.receive_signal(signal_type, value * node.connection_strength)
+        }
+    }
+}
+
+function main() {
+    let cultivation = new CultivationNetwork()
+    
+    // Simulation loop
+    for cycle in range(0, 100) {
+        cultivation.monitor_growth()
+        
+        if cycle % 10 == 0 {
+            print("Cycle: ", cycle)
+            print("Growth Rate: ", cultivation.growth_rate)
+            print("Health Status: ", cultivation.health_status)
+            print("Nutrient Level: ", cultivation.nutrient_level)
+            print("---")
+        }
+        
+        // Simulate environmental changes
+        if cycle == 50 {
+            set_env("temperature", 26.0)
+            print("Environmental change: Temperature increased to 26°C")
+        }
+        
+        sleep(100)  // 100ms delay
+    }
+    
+    print("Cultivation monitoring complete")
+}

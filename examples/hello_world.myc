@@ -1,0 +1,20 @@
+// Hello World in Mycelium-EI-Lang
+
+environment {
+    temperature: 22.5,
+    humidity: 85.0
+}
+
+function main() {
+    print("Hello from the Mycelium Network!")
+    
+    let greeting: string = "Welcome to ecological intelligence programming"
+    print(greeting)
+    
+    let temp: float = get_env("temperature")
+    if temp > 20.0 {
+        print("Optimal growth conditions detected")
+    } else {
+        print("Adjusting environmental parameters...")
+    }
+}

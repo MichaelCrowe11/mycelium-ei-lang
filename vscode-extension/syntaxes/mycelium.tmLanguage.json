@@ -1,0 +1,164 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Mycelium-EI-Lang",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#bio-constructs"
+    },
+    {
+      "include": "#quantum-constructs"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.mycelium",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.mycelium",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.mycelium",
+          "match": "\\b(if|else|while|for|return|break|continue|in)\\b"
+        },
+        {
+          "name": "keyword.other.mycelium",
+          "match": "\\b(function|let|const|var|import|export|from|as)\\b"
+        },
+        {
+          "name": "keyword.bio.mycelium",
+          "match": "\\b(environment|mycelium|network|signal|adapt|grow|evolve|mutate)\\b"
+        },
+        {
+          "name": "keyword.quantum.mycelium",
+          "match": "\\b(quantum|entangle|superposition|collapse|measure|qubit)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.mycelium",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.mycelium",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.mycelium",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.mycelium",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.mycelium",
+          "match": "\\b[0-9]+\\.[0-9]+\\b"
+        },
+        {
+          "name": "constant.numeric.integer.mycelium",
+          "match": "\\b[0-9]+\\b"
+        },
+        {
+          "name": "constant.numeric.hex.mycelium",
+          "match": "\\b0x[0-9a-fA-F]+\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arithmetic.mycelium",
+          "match": "(\\+|\\-|\\*|\\/|%|\\^)"
+        },
+        {
+          "name": "keyword.operator.comparison.mycelium",
+          "match": "(==|!=|<=|>=|<|>)"
+        },
+        {
+          "name": "keyword.operator.logical.mycelium",
+          "match": "(&&|\\|\\||!)"
+        },
+        {
+          "name": "keyword.operator.assignment.mycelium",
+          "match": "(=|\\+=|\\-=|\\*=|\\/=)"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function.mycelium",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()"
+        },
+        {
+          "name": "support.function.builtin.mycelium",
+          "match": "\\b(print|len|range|abs|min|max|sin|cos|sleep|genetic_optimize|swarm_optimize|ant_optimize|create_network|broadcast_signal|quantum_entangle)\\b"
+        }
+      ]
+    },
+    "bio-constructs": {
+      "patterns": [
+        {
+          "name": "storage.type.bio.mycelium",
+          "match": "\\b(organism|population|genome|phenotype|fitness|cultivation)\\b"
+        },
+        {
+          "name": "variable.language.bio.mycelium",
+          "match": "\\b(temperature|humidity|nutrients|ph|light|co2|growth_rate)\\b"
+        }
+      ]
+    },
+    "quantum-constructs": {
+      "patterns": [
+        {
+          "name": "storage.type.quantum.mycelium",
+          "match": "\\b(qstate|qgate|qcircuit|qregister)\\b"
+        },
+        {
+          "name": "support.function.quantum.mycelium",
+          "match": "\\b(hadamard|pauli_x|pauli_y|pauli_z|cnot|measure_qubit)\\b"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.mycelium"
+}

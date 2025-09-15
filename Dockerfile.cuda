@@ -1,0 +1,64 @@
+# GPU-enabled Dockerfile with CUDA support
+FROM nvidia/cuda:12.0-devel-ubuntu22.04 as builder
+
+# Install Python and build tools
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3.11-dev \
+    python3-pip \
+    gcc \
+    g++ \
+    make \
+    cmake \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Python 3.11 as default
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+WORKDIR /build
+COPY . .
+
+# Install with CUDA support
+RUN pip install --no-cache-dir build wheel numpy cupy-cuda12x
+RUN python -m build
+
+# Production stage with CUDA runtime
+FROM nvidia/cuda:12.0-runtime-ubuntu22.04
+
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+# Copy built package
+COPY --from=builder /build/dist/*.whl /tmp/
+
+# Install with GPU dependencies
+RUN pip install --no-cache-dir \
+    /tmp/*.whl \
+    cupy-cuda12x \
+    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 \
+    && rm /tmp/*.whl
+
+WORKDIR /workspace
+
+ENV MYCELIUM_HOME=/workspace
+ENV PYTHONUNBUFFERED=1
+ENV CUDA_VISIBLE_DEVICES=0
+
+# Create non-root user
+RUN useradd -m -s /bin/bash mycelium && \
+    chown -R mycelium:mycelium /workspace
+
+USER mycelium
+
+CMD ["python", "-m", "mycelium_ei", "--gpu", "--help"]
+
+LABEL maintainer="Michael Benjamin Crowe"
+LABEL version="0.1.0-cuda"
+LABEL description="Mycelium-EI-Lang with CUDA GPU acceleration"
