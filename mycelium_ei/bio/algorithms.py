@@ -7,10 +7,9 @@ Implements genetic algorithms, swarm intelligence, and evolutionary computation
 import random
 import math
 import time
-import numpy as np
+from statistics import fmean
 from typing import List, Dict, Any, Callable, Tuple, Optional
 from dataclasses import dataclass
-from abc import ABC, abstractmethod
 import copy
 
 # Genetic Algorithm Implementation
@@ -222,32 +221,29 @@ class GeneticAlgorithm:
 # Swarm Intelligence - Particle Swarm Optimization
 class Particle:
     """Particle in PSO swarm"""
-    
+
     def __init__(self, dimensions: int, bounds: Tuple[float, float] = (-1.0, 1.0)):
-        self.position = np.random.uniform(bounds[0], bounds[1], dimensions)
-        self.velocity = np.random.uniform(-0.1, 0.1, dimensions)
-        self.best_position = self.position.copy()
+        self.position = [random.uniform(bounds[0], bounds[1]) for _ in range(dimensions)]
+        self.velocity = [random.uniform(-0.1, 0.1) for _ in range(dimensions)]
+        self.best_position = list(self.position)
         self.best_fitness = float('-inf')
         self.fitness = float('-inf')
-        
-    def update_velocity(self, global_best_position: np.ndarray, 
-                       w: float = 0.7, c1: float = 2.0, c2: float = 2.0):
+
+    def update_velocity(self, global_best_position: List[float],
+                        w: float = 0.7, c1: float = 2.0, c2: float = 2.0):
         """Update particle velocity"""
-        r1, r2 = np.random.random(2)
-        
-        cognitive = c1 * r1 * (self.best_position - self.position)
-        social = c2 * r2 * (global_best_position - self.position)
-        
-        self.velocity = w * self.velocity + cognitive + social
-        
-        # Velocity clamping
+        r1, r2 = random.random(), random.random()
         max_velocity = 0.5
-        self.velocity = np.clip(self.velocity, -max_velocity, max_velocity)
-    
+        for i in range(len(self.position)):
+            cognitive = c1 * r1 * (self.best_position[i] - self.position[i])
+            social = c2 * r2 * (global_best_position[i] - self.position[i])
+            velocity = w * self.velocity[i] + cognitive + social
+            self.velocity[i] = max(-max_velocity, min(max_velocity, velocity))
+
     def update_position(self, bounds: Tuple[float, float] = (-1.0, 1.0)):
         """Update particle position"""
-        self.position += self.velocity
-        self.position = np.clip(self.position, bounds[0], bounds[1])
+        for i in range(len(self.position)):
+            self.position[i] = max(bounds[0], min(bounds[1], self.position[i] + self.velocity[i]))
 
 class ParticleSwarmOptimization:
     """Particle Swarm Optimization algorithm"""
@@ -261,7 +257,7 @@ class ParticleSwarmOptimization:
         self.bounds = bounds
         
         self.swarm = [Particle(dimensions, bounds) for _ in range(num_particles)]
-        self.global_best_position = np.random.uniform(bounds[0], bounds[1], dimensions)
+        self.global_best_position = [random.uniform(bounds[0], bounds[1]) for _ in range(dimensions)]
         self.global_best_fitness = float('-inf')
         self.fitness_history = []
         
@@ -270,8 +266,8 @@ class ParticleSwarmOptimization:
         self.c1 = 2.0  # Cognitive parameter
         self.c2 = 2.0  # Social parameter
         
-    def optimize(self, fitness_function: Callable[[np.ndarray], float], 
-                verbose: bool = True) -> Tuple[np.ndarray, float]:
+    def optimize(self, fitness_function: Callable[[List[float]], float],
+                verbose: bool = True) -> Tuple[List[float], float]:
         """Run PSO optimization"""
         
         print(f"[PSO] Starting with {self.num_particles} particles")
@@ -284,12 +280,12 @@ class ParticleSwarmOptimization:
                 # Update personal best
                 if particle.fitness > particle.best_fitness:
                     particle.best_fitness = particle.fitness
-                    particle.best_position = particle.position.copy()
+                    particle.best_position = list(particle.position)
                 
                 # Update global best
                 if particle.fitness > self.global_best_fitness:
                     self.global_best_fitness = particle.fitness
-                    self.global_best_position = particle.position.copy()
+                    self.global_best_position = list(particle.position)
             
             # Update velocities and positions
             # Adaptive inertia weight (decreases over time)
@@ -300,7 +296,7 @@ class ParticleSwarmOptimization:
                 particle.update_position(self.bounds)
             
             # Track progress
-            avg_fitness = np.mean([p.fitness for p in self.swarm])
+            avg_fitness = fmean(p.fitness for p in self.swarm)
             self.fitness_history.append({
                 'iteration': iteration,
                 'best_fitness': self.global_best_fitness,
@@ -323,19 +319,16 @@ class Ant:
         self.solution = []
         self.fitness = 0.0
         
-    def construct_solution(self, pheromones: np.ndarray, heuristic: np.ndarray, 
-                          alpha: float = 1.0, beta: float = 2.0):
+    def construct_solution(self, pheromones: List[List[float]], heuristic: List[List[float]],
+                           alpha: float = 1.0, beta: float = 2.0):
         """Construct solution using pheromone trails and heuristic information"""
         self.solution = []
-        
+
         for var in range(self.num_variables):
             # Probabilistic selection based on pheromone and heuristic
-            probabilities = (pheromones[var] ** alpha) * (heuristic[var] ** beta)
-            probabilities = probabilities / np.sum(probabilities)
-            
-            # Select value based on probability distribution
-            selected_idx = np.random.choice(len(probabilities), p=probabilities)
-            value = (selected_idx / len(probabilities)) * 2 - 1  # Scale to [-1, 1]
+            weights = [(p ** alpha) * (h ** beta) for p, h in zip(pheromones[var], heuristic[var])]
+            selected_idx = random.choices(range(len(weights)), weights=weights)[0]
+            value = (selected_idx / len(weights)) * 2 - 1  # Scale to [-1, 1]
             self.solution.append(value)
 
 class AntColonyOptimization:
@@ -351,8 +344,8 @@ class AntColonyOptimization:
         
         # Discretization for continuous problems
         self.num_bins = 20
-        self.pheromones = np.ones((num_variables, self.num_bins))
-        self.heuristic = np.ones((num_variables, self.num_bins))
+        self.pheromones = [[1.0] * self.num_bins for _ in range(num_variables)]
+        self.heuristic = [[1.0] * self.num_bins for _ in range(num_variables)]
         
         self.best_solution = None
         self.best_fitness = float('-inf')
@@ -378,7 +371,9 @@ class AntColonyOptimization:
                     self.best_solution = ant.solution.copy()
             
             # Update pheromones
-            self.pheromones *= (1 - self.evaporation_rate)  # Evaporation
+            for row in self.pheromones:  # Evaporation
+                for i in range(len(row)):
+                    row[i] *= (1 - self.evaporation_rate)
             
             # Pheromone deposition
             for ant in ants:
@@ -389,7 +384,7 @@ class AntColonyOptimization:
                         self.pheromones[var_idx][bin_idx] += ant.fitness
             
             # Track progress
-            avg_fitness = np.mean([ant.fitness for ant in ants])
+            avg_fitness = fmean(ant.fitness for ant in ants)
             self.fitness_history.append({
                 'iteration': iteration,
                 'best_fitness': self.best_fitness,
@@ -449,7 +444,7 @@ class BiologicalOptimizer:
             best_position, best_fitness = pso.optimize(fitness_function)
             result = {
                 'algorithm': algorithm,
-                'best_solution': best_position.tolist(),
+                'best_solution': list(best_position),
                 'best_fitness': best_fitness,
                 'iterations': pso.max_iterations,
                 'fitness_history': pso.fitness_history,

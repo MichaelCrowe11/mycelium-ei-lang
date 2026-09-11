@@ -65,7 +65,9 @@ function monitor_network() {
     
     let stats = get_network_stats()
     print("Network Statistics:")
-    print("  Nodes:", stats)
+    print("  Nodes:", stats.nodes)
+    print("  Connections:", stats.connections)
+    print("  Temperature:", stats.environment.temperature)
     
     return stats
 }

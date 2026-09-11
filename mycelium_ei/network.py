@@ -38,14 +38,14 @@ class MyceliumNode:
     def connect_to(self, other_node):
         self.connections[other_node.node_id] = other_node
         other_node.connections[self.node_id] = self
-        print(f"Connected {self.node_id[:8]} <-> {other_node.node_id[:8]}")
+        print(f"Connected {self.node_id} <-> {other_node.node_id}")
     
     def send_signal(self, signal: Signal):
         if self.network:
             self.network.propagate_signal(signal, self)
         
     def receive_signal(self, signal: Signal):
-        print(f"Node {self.node_id[:8]}: Received {signal.signal_type.value} signal")
+        print(f"Node {self.node_id}: Received {signal.signal_type.value} signal")
         
         if signal.signal_type == SignalType.GROWTH:
             rate = signal.payload.get('rate', 0.0)
@@ -71,10 +71,10 @@ class MyceliumNetwork:
     
     def add_node(self, node: MyceliumNode = None):
         if node is None:
-            node = MyceliumNode()
+            node = MyceliumNode(f"node_{len(self.nodes) + 1:02d}")
         node.network = self
         self.nodes[node.node_id] = node
-        print(f"Added node {node.node_id[:8]} to network")
+        print(f"Added node {node.node_id} to network")
         return node
     
     def create_simple_topology(self, num_nodes: int = 5):

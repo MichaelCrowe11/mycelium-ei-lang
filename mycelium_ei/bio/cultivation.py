@@ -13,11 +13,10 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, asdict
 from enum import Enum
-import numpy as np
 
-from network_framework import MyceliumNetwork, SignalType
-from bio_algorithms import BiologicalOptimizer
-from bio_ml_integration import BiologicalMLOptimizer
+from ..network import MyceliumNetwork, SignalType
+from .algorithms import BiologicalOptimizer
+from .ml import BiologicalMLOptimizer
 
 class CultivationStage(Enum):
     INITIALIZATION = "initialization"
