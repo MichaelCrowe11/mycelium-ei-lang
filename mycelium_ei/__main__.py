@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
-"""
-Mycelium-EI-Lang Command Line Interface
-"""
+"""``python -m mycelium_ei program.myc``"""
 
-from . import main
+import sys
+
+from .cli import main
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

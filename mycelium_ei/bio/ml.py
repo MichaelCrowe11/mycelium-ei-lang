@@ -4,13 +4,11 @@ Bio-Inspired Machine Learning Integration for Mycelium-EI-Lang
 Combines neural networks with biological growth patterns and environmental adaptation
 """
 
-import numpy as np
 import random
 import time
 import math
 from typing import List, Dict, Any, Callable, Tuple, Optional
 from dataclasses import dataclass
-from abc import ABC, abstractmethod
 
 # Neural Network with Bio-Inspired Features
 class BiologicalNeuron:

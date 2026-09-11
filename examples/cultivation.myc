@@ -26,7 +26,7 @@ mycelium CultivationNetwork {
         growth_rate = calculate_growth_factor(temp, humidity, co2)
         
         if growth_rate < 0.5 {
-            adapt_environment()
+            adjust_to_environment()
         }
         
         // Update health status

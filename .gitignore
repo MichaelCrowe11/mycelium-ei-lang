@@ -93,3 +93,5 @@ $RECYCLE.BIN/
 # Linux
 .directory
 .Trash-*/
+# Virtual environments
+.venv/

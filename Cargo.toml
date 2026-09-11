@@ -1,10 +1,6 @@
 [workspace]
 members = [
-    "compiler",
-    "runtime",
-    "stdlib",
-    "tools/myc",
-    "tools/mypm"
+    "compiler"
 ]
 resolver = "2"
 

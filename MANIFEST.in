@@ -1,14 +1,7 @@
 include README.md
 include LICENSE
-include requirements.txt
-include MANIFEST.in
+include CHANGELOG.md
 recursive-include examples *.myc
-recursive-include docs *.md *.rst
-exclude .gitignore
-exclude .git
-prune __pycache__
-prune .pytest_cache
+recursive-include docs *.md
 global-exclude *.pyc
-global-exclude *.pyo
-global-exclude *.swp
 global-exclude .DS_Store

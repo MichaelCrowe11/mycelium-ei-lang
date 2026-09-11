@@ -1,56 +1,64 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mycelium-ei-lang"
-version = "0.1.0"
-authors = [
-    {name = "Michael Benjamin Crowe", email = "michael.benjamin.crowe@gmail.com"},
-]
-description = "Revolutionary bio-inspired programming language with quantum computing integration"
+dynamic = ["version"]
+description = "A small interpreted language for cultivation models: environment parameters, adapt functions that fire when they change, and genetic, particle swarm and ant colony optimizers."
 readme = "README.md"
-license = {text = "Proprietary - See LICENSE file"}
-requires-python = ">=3.8"
+license = "LicenseRef-Proprietary"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+dependencies = []
+authors = [
+    {name = "Michael Benjamin Crowe", email = "michael@crowelogic.com"},
+]
+keywords = [
+    "interpreter",
+    "scripting-language",
+    "cultivation",
+    "mycelium",
+    "genetic-algorithm",
+    "particle-swarm",
+    "ant-colony",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
+    "Topic :: Software Development :: Interpreters",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Software Development :: Compilers",
-    "License :: Other/Proprietary License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
 ]
 
 [project.urls]
 Homepage = "https://github.com/MichaelCrowe11/mycelium-ei-lang"
-Documentation = "https://mycelium-ei-lang.readthedocs.io"
 Repository = "https://github.com/MichaelCrowe11/mycelium-ei-lang"
 Issues = "https://github.com/MichaelCrowe11/mycelium-ei-lang/issues"
+Changelog = "https://github.com/MichaelCrowe11/mycelium-ei-lang/blob/master/CHANGELOG.md"
 
 [project.scripts]
-mycelium = "mycelium_ei:main"
-myc = "mycelium_ei:main"
+myc = "mycelium_ei.cli:main"
+mycelium = "mycelium_ei.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
 
 [tool.setuptools]
-packages = ["mycelium_ei"]
+packages = ["mycelium_ei", "mycelium_ei.bio"]
 
-[tool.black]
-line-length = 100
-target-version = ['py38', 'py39', 'py310', 'py311']
+[tool.setuptools.dynamic]
+version = {attr = "mycelium_ei.__version__"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-python_functions = ["test_*"]
-
-[tool.mypy]
-python_version = "3.8"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
+addopts = "-q"
