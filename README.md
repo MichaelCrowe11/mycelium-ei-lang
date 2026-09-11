@@ -8,6 +8,14 @@ early stage
 
 0.2.0 is the first version whose `pip install` runs `.myc` programs. Releases 0.1.0 to 0.1.2 installed an interpreter that parsed Python syntax and imported a dependency they did not declare, so `myc examples/hello_world.myc` failed on every clean install.
 
+As of 2026-09-11 the PyPI upload of 0.2.0 is pending an account permission, so `pip install mycelium-ei-lang` still gives 0.1.2. Until it lands, install the 0.2.0 wheel from the GitHub release instead:
+
+```
+pip install https://github.com/MichaelCrowe11/mycelium-ei-lang/releases/download/v0.2.0/mycelium_ei_lang-0.2.0-py3-none-any.whl
+```
+
+This paragraph goes away when PyPI serves 0.2.0.
+
 What does not work yet:
 
 - One file per program. There is no `import`, no module system and no standard library beyond the builtins listed in `docs/reference.md`.
