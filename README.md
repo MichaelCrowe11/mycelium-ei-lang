@@ -6,7 +6,7 @@ Mycelium-EI-Lang is a small interpreted language for cultivation models: environ
 
 early stage
 
-0.2.0 is the first version whose `pip install` runs `.myc` programs. Releases 0.1.0 to 0.1.2 on PyPI installed an interpreter that parsed Python syntax and imported a dependency they did not declare, so `myc examples/hello_world.myc` failed on every clean install. Until 0.2.0 is uploaded, `pip install mycelium-ei-lang` still gives you 0.1.2; install from this repository instead (below).
+0.2.0 is the first version whose `pip install` runs `.myc` programs. Releases 0.1.0 to 0.1.2 installed an interpreter that parsed Python syntax and imported a dependency they did not declare, so `myc examples/hello_world.myc` failed on every clean install.
 
 What does not work yet:
 
@@ -21,25 +21,19 @@ What does not work yet:
 Run on 2026-09-11 with CPython 3.13.14 on macOS.
 
 ```
-git clone https://github.com/MichaelCrowe11/mycelium-ei-lang
-cd mycelium-ei-lang
 python3 -m venv .venv
 . .venv/bin/activate
-pip install .
+pip install mycelium-ei-lang
 myc --version
-myc examples/hello_world.myc
 ```
 
 Output:
 
 ```
 mycelium-ei-lang 0.2.0
-Hello from the Mycelium Network!
-Welcome to ecological intelligence programming
-Optimal growth conditions detected
 ```
 
-The program that produced it, `examples/hello_world.myc`:
+Save this as `hello.myc`:
 
 ```
 // Hello World in Mycelium-EI-Lang
@@ -64,7 +58,21 @@ function main() {
 }
 ```
 
-`mycelium` and `python -m mycelium_ei` are the same command as `myc`. The package has no dependencies. To run the tests: `pip install pytest` then `pytest` in the repository root.
+Then run it:
+
+```
+myc hello.myc
+```
+
+Output:
+
+```
+Hello from the Mycelium Network!
+Welcome to ecological intelligence programming
+Optimal growth conditions detected
+```
+
+`mycelium` and `python -m mycelium_ei` are the same command as `myc`. The package has no dependencies. The twelve programs in `examples/` and the tests are in the repository: `git clone https://github.com/MichaelCrowe11/mycelium-ei-lang`, then `pip install -e . pytest` and `pytest` in the checkout.
 
 ## What runs today
 
