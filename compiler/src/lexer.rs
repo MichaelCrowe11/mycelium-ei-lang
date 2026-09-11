@@ -2,6 +2,9 @@ use logos::Logos;
 use crate::error::{CompilerError, Result};
 
 #[derive(Logos, Debug, PartialEq, Clone)]
+#[logos(skip r"[ \t\n\f]+")]
+#[logos(skip r"//[^\n]*")]
+#[logos(skip r"/\*[^*]*\*+(?:[^/*][^*]*\*+)*/")]
 pub enum Token {
     #[token("environment")]
     Environment,
@@ -138,11 +141,6 @@ pub enum Token {
     #[token("!")]
     Not,
     
-    #[regex(r"[ \t\n\f]+", logos::skip)]
-    #[regex(r"//[^\n]*", logos::skip)]
-    #[regex(r"/\*[^*]*\*+(?:[^/*][^*]*\*+)*/", logos::skip)]
-    #[error]
-    Error,
 }
 
 pub fn tokenize(source: &str) -> Result<Vec<Token>> {
@@ -151,11 +149,6 @@ pub fn tokenize(source: &str) -> Result<Vec<Token>> {
     
     while let Some(token) = lexer.next() {
         match token {
-            Ok(Token::Error) => {
-                return Err(CompilerError::LexicalError(
-                    format!("Unexpected character at position {}", lexer.span().start)
-                ));
-            },
             Ok(token) => tokens.push(token),
             Err(_) => {
                 return Err(CompilerError::LexicalError(

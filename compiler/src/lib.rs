@@ -15,14 +15,22 @@ with biological cultivation systems.
 
 ## Usage
 
-```rust
+The crate is a library skeleton. The pipeline below compiles; it is not a
+working compiler and the Python package does not use it.
+
+```rust,no_run
 use mycelium_ei_compiler::*;
 
-let source = include_str!("../../examples/cultivation.myc");
-let tokens = lexer::tokenize(source)?;
-let ast = parser::parse(tokens)?;
-let analyzed = semantic::analyze(ast)?;
-let bytecode = codegen::compile(analyzed)?;
+fn main() -> Result<()> {
+    let source = "environment { temperature: 22.5 }";
+    let tokens = lexer::tokenize(source)?;
+    let ast = parser::parse(tokens)?;
+    let options = CompilerOptions::default();
+    let analyzed = semantic::analyze(ast, &options)?;
+    let optimized = optimization::optimize(analyzed, &options)?;
+    let _bytecode = codegen::generate(optimized, &options)?;
+    Ok(())
+}
 ```
 */
 

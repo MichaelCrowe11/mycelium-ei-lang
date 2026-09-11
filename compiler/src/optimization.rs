@@ -94,13 +94,15 @@ impl Optimizer {
                         return Ok(then_branch.into_iter().next().unwrap());
                     }
                 } else if let Expression::Boolean(false) = optimized_condition {
-                    if let Some(else_branch) = else_branch {
-                        if else_branch.len() == 1 {
-                            return Ok(else_branch.into_iter().next().unwrap());
-                        }
-                    } else {
-                        return Ok(Statement::Expression(Expression::Boolean(false)));
-                    }
+                    return match else_branch {
+                        Some(branch) if branch.len() == 1 => Ok(branch.into_iter().next().unwrap()),
+                        Some(branch) => Ok(Statement::If {
+                            condition: optimized_condition,
+                            then_branch: self.optimize_statements(then_branch)?,
+                            else_branch: Some(self.optimize_statements(branch)?),
+                        }),
+                        None => Ok(Statement::Expression(Expression::Boolean(false))),
+                    };
                 }
                 
                 Ok(Statement::If {
