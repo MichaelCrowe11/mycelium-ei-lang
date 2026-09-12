@@ -1,0 +1,43 @@
+// ROADMAP SYNTAX. Does not run in 0.2.2.
+//
+// A test with a mock environment, which the 2025 roadmap asked for ("mock
+// environmental conditions"). The same rules that judge recorded telemetry
+// judge a hand-written series, so a rule can be proven offline before it ever
+// sees a sensor.
+
+environment mock = series {
+    zone: "tent-1"
+    metric: humidity_pct
+    cadence: 10 min
+    values: [86 %, 85 %, 79 %, 78 %, 78 %, 79 %, 81 %, 85 %]   // 40 min below 80, then back
+}
+
+stage log mock_stages { "tent-1": fruiting, since: mock.start }
+
+practice floor80 = envelope {
+    metric: humidity_pct
+    stage: fruiting
+    lower: 80 % from ["z2fpfQGNbQA:005", "btXfkWYlXEI:009"]   // two distinct sources, so the floor is judged
+    upper: none
+}
+
+test "a 40 minute dip is one sustained period" {
+    let v = judge(mock.series("tent-1", humidity_pct), floor80, stages: mock_stages["tent-1"])
+    assert v.kind == outside
+    assert len(v.sustained.periods) == 1
+    assert v.sustained.periods[0].duration == 40 min      // 4 readings, each standing for its 10 min
+    assert v.sustained.periods[0].worst == 78 %
+}
+
+test "a single source floor is not judged" {
+    let one = envelope { metric: humidity_pct, stage: fruiting, lower: 80 % from ["z2fpfQGNbQA:005"], upper: none }
+    let v = judge(mock.series("tent-1", humidity_pct), one, stages: mock_stages["tent-1"])
+    assert v.kind == not_judged
+    assert v.reason.contains("1 documented statement")
+}
+
+test "units do not mix" {
+    // A static error, reported by `myc --check` before anything runs:
+    // cannot compare Quantity<percent> with Quantity<degC>
+    assert_check_fails { mock.series("tent-1", humidity_pct).last < 20 C }
+}

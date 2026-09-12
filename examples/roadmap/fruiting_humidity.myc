@@ -1,0 +1,54 @@
+// ROADMAP SYNTAX. This program does not run in 0.2.2. It shows the shape the
+// language is heading for: a recorded environment, a stage log, a practice
+// envelope built from cited statements, and a judgment with receipts.
+//
+// The recording is the 469-hour Crowe Sense aggregate (two fruiting tents,
+// 2026-05-24 to 2026-06-16). The finding this program is meant to reproduce:
+// both tents sit below the documented 80 % fruiting humidity floor for about
+// six hours every night, 02:00 to 08:00 local, on 20 of 23 nights.
+
+environment tents = replay("recordings/cs_hourly.csv", format: telemetry_v1) {
+    zones: ["tent-1", "tent-2"]
+    quality: ["ok", "est"]          // readings marked stale or fault are dropped
+    aggregate: 1 h                  // hourly means: a reading stands for its hour
+}
+
+stage log tents_stages {
+    "tent-1": fruiting, species: "shiitake", since: 2026-05-24T00:00Z
+    "tent-2": fruiting, species: "shiitake", since: 2026-05-24T00:00Z
+}
+
+// Evidence is versioned data, not a language fact. Each statement carries the
+// video chunk it came from. The consensus rules are language semantics:
+// median without interpolation, sidedness honoured, point statements support
+// the floor only, and a side that rests on one source is not judged.
+practice fruiting_humidity = envelope("evidence/practice-envelope.json") {
+    metric: humidity_pct
+    stage: fruiting
+    require: 2 sources per side
+}
+
+function main() {
+    for zone in tents.zones {
+        let rh = tents.series(zone, humidity_pct)
+        let verdict = judge(rh, fruiting_humidity, stages: tents_stages[zone])
+
+        print(zone, "documented band:", verdict.band)        // at least 80 % [z2fpfQGNbQA:005, ...]
+        if verdict.kind == not_judged {
+            print("  not judged:", verdict.reason)
+        } else {
+            print("  outside for", verdict.sustained.total, "across", len(verdict.sustained.periods), "periods")
+            print("  counting short dips:", verdict.total_outside, "=", verdict.percent_outside, "% of readings")
+            for p in verdict.sustained.periods.slice(0, 3) {
+                print("   ", p.start, "to", p.end, p.direction, "band, worst", p.worst)
+            }
+        }
+    }
+
+    // CO2 has no documented setpoint anywhere in the corpus. The same call
+    // refuses instead of inventing a band.
+    let co2 = judge(tents.series("tent-1", co2_ppm), envelope("evidence/practice-envelope.json") {
+        metric: co2_ppm, stage: fruiting, require: 2 sources per side
+    }, stages: tents_stages["tent-1"])
+    print("co2:", co2.kind, co2.reason)   // not_judged  rests on 1 documented statement, not a consensus
+}

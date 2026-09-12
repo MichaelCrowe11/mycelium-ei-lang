@@ -88,6 +88,10 @@ Each item is covered by a test in `tests/`; the suite (140 tests) passed on CPyt
 - Importing the package pulls in no third-party module (`tests/test_no_dependencies.py`).
 - `cargo build` and `cargo test` pass for `compiler/` (one unit test, one doc test).
 
+## Roadmap (not built)
+
+`docs/roadmap.md` proposes what the language becomes: quantities with units, recorded and replayable environments, stage logs, practice envelopes built from cited statements, and adapt rules with sustain windows and declared effects. It also records where the idea came from, from the January 2025 repository onward. The programs in `examples/roadmap/` are written in that proposed syntax; they do not run in 0.2.2 and the tests do not execute them.
+
 ## Limits
 
 - This is an interpreter for small models, not a numerical library. The optimizers search `[-1, 1]` per dimension with populations of tens; no speed or quality claim is made against established packages.

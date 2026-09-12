@@ -1,0 +1,35 @@
+// ROADMAP SYNTAX. Does not run in 0.2.2.
+//
+// An adapt rule with the temporal semantics the current language lacks:
+// a sustain window, a recovery margin (hysteresis), a cooldown, declared
+// effects, and replay in which control effects become recorded proposals
+// rather than hardware writes. The thresholds here are operator policy and
+// are labelled as such; they are not documented cultivation constants.
+
+environment tent = replay("recordings/sense_24h.csv", format: telemetry_v1) {
+    zones: ["tent-1"]
+    cadence: 9 s                     // raw readings; a run covers one cadence past its last sample
+}
+
+let findings = report()
+
+adapt low_humidity on tent.series("tent-1", humidity_pct) {
+    effects { append: findings, propose: humidifier }   // propose, never drive, in replay
+
+    when reading < 80 % sustained 20 min {
+        findings.period(reading.zone, "below 80 % floor", since: sustained.start, worst: sustained.worst)
+        propose humidifier.duty(0.8)                     // recorded as a proposal with its timestamp
+    }
+    recover when reading >= 82 % for 15 min              // 2 % margin: hysteresis is trigger policy, not the envelope
+    cooldown 30 min
+    on unknown stage: skip
+    on gap > 3 * cadence: break                          // an offline sensor is not a room out of band
+}
+
+function main() {
+    tent.replay()
+    print(findings.summary())
+    // Every proposal carries its cause and its time, so the output is a
+    // reviewable list, not an action taken:
+    for p in findings.proposals { print(p.at, p.effect, "because", p.cause) }
+}
