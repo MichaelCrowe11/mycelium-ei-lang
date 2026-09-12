@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Removed
+
+- The 2025 planning documents and never-run directories at the repository
+  root: `crypto-payments/`, `npm-package/`, `vscode-extension/`, `wasm/`,
+  `snap/`, `homebrew/`, `conda-recipe/`, `marketing/`, both Dockerfiles, the
+  roadmap, monetization, publishing and demo documents, and the two root
+  experiments `quantum_bio_computing.py` and `performance_optimizations.py`.
+  All of GitHub's 77 Dependabot alerts came from lockfiles in those
+  directories. The files stay in the history and on the `archive/2025-planning`
+  branch. No packaged code changed.
+
 ## 0.2.2 (2026-09-11)
 
 First release on PyPI, published as `mycelium-ei-language`.

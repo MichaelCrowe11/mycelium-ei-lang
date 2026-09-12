@@ -64,12 +64,6 @@ Desktop.ini
 secrets/
 credentials/
 
-# Payment gateway
-crypto-payments/.env
-crypto-payments/.env.local
-crypto-payments/__pycache__/
-crypto-payments/.vercel/
-
 # Node modules (for npm package)
 node_modules/
 npm-debug.log*

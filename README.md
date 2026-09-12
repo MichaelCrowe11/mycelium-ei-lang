@@ -96,8 +96,7 @@ Each item is covered by a test in `tests/`; the suite (140 tests) passed on CPyt
 
 - This is an interpreter for small models, not a numerical library. The optimizers search `[-1, 1]` per dimension with populations of tens; no speed or quality claim is made against established packages.
 - `create_cultivation` and `monitor_cultivation` simulate a grow room. Do not use them to run one.
-- `quantum_bio_computing.py` and `performance_optimizations.py` at the repository root are standalone experiments from 2025 that need numpy and numba. They are not part of the package and have no tests.
-- The directories `crypto-payments/`, `npm-package/`, `vscode-extension/`, `wasm/`, `snap/`, `homebrew/`, `conda-recipe/` and the two Dockerfiles have not been run. The planning documents at the root (roadmaps, monetization, publishing) describe 2025 intentions and prices. They are not an offer.
+- The 2025 plans (a payment service, an npm package, a VS Code extension, a WebAssembly demo, packaging recipes, roadmaps and pricing documents) were removed from the tree on 2026-09-11. They were never run and are not an offer. They remain in the history and on the `archive/2025-planning` branch.
 - Syntax errors are reported one at a time, at the first token the parser cannot place.
 
 ## License and contact
