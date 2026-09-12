@@ -54,7 +54,7 @@ Real benchmarks:
 - Portfolio optimization: 18 minutes vs 2.4 hours
 - Neural architecture search: 10x faster than random search
 
-It's open source (proprietary license for commercial use):
+It is proprietary (source visible for personal, non-commercial evaluation; commercial use by written permission):
 GitHub: https://github.com/MichaelCrowe11/pulsar-lang
 
 You can install it now: `pip install mycelium-ei-lang`

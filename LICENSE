@@ -1,6 +1,6 @@
 PROPRIETARY SOFTWARE LICENSE AGREEMENT
 
-Copyright (c) 2024 Michael Benjamin Crowe. All Rights Reserved.
+Copyright (c) 2024-2026 Michael Benjamin Crowe. All Rights Reserved.
 
 This software and associated documentation files (the "Software") are the exclusive
 property of Michael Benjamin Crowe ("Owner"). 
@@ -26,8 +26,8 @@ You may NOT:
 - Remove or alter any proprietary notices or labels
 
 COMMERCIAL LICENSING:
-For commercial use, enterprise deployment, or custom licensing arrangements, 
-please contact: michael.benjamin.crowe@[domain]
+For commercial use, enterprise deployment, or custom licensing arrangements,
+please contact: michael@crowelogic.com
 
 INTELLECTUAL PROPERTY:
 All intellectual property rights in and to the Software, including but not limited
@@ -53,5 +53,5 @@ GOVERNING LAW:
 This Agreement shall be governed by and construed in accordance with the laws of
 the jurisdiction in which the Owner resides.
 
-For licensing inquiries: michael.benjamin.crowe@[domain]
-For technical support: support@mycelium-ei-lang.com
+For licensing inquiries: michael@crowelogic.com
+For technical support: https://github.com/MichaelCrowe11/mycelium-ei-lang/issues

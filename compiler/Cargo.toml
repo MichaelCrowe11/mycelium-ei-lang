@@ -2,9 +2,10 @@
 name = "mycelium-ei-compiler"
 version = "0.1.0"
 edition = "2021"
-authors = ["Mycelium-EI Team <team@mycelium-ei.com>"]
-description = "Mycelium-EI-Lang compiler"
-license = "Apache-2.0"
+authors = ["Michael Benjamin Crowe <michael@crowelogic.com>"]
+description = "Mycelium-EI-Lang compiler skeleton (library only, not used by the Python package)"
+license-file = "../LICENSE"
+publish = false
 
 [dependencies]
 # Workspace dependencies

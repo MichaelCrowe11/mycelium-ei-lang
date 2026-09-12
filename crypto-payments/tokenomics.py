@@ -305,7 +305,7 @@ class MyceliumTokenomics:
     def generate_smart_contract_spec(self) -> str:
         """Generate Solidity smart contract specification"""
         return '''
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";

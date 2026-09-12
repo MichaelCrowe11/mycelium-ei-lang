@@ -79,7 +79,7 @@ This isn't a crypto gimmick - it's about global accessibility and lower transact
 
 ## Open Source Core
 
-The core language is open source (proprietary license for commercial use). We monetize through:
+The language is proprietary: the source is visible for personal, non-commercial evaluation, and commercial use needs written permission. We monetize through:
 - Cloud compute for resource-intensive algorithms
 - Premium algorithm libraries
 - Enterprise support and training
