@@ -3,7 +3,7 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mycelium-ei-lang"
+name = "mycelium-ei-language"
 dynamic = ["version"]
 description = "A small interpreted language for cultivation models: environment parameters, adapt functions that fire when they change, and genetic, particle swarm and ant colony optimizers."
 readme = "README.md"

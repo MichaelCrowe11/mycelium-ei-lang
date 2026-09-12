@@ -24,7 +24,7 @@ def build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("file", nargs="?", help="program to run; use '-' to read from standard input")
-    parser.add_argument("--version", action="version", version=f"mycelium-ei-lang {__version__}")
+    parser.add_argument("--version", action="version", version=f"mycelium-ei-language {__version__}")
     parser.add_argument("--check", action="store_true", help="parse the program and report syntax errors without running it")
     parser.add_argument("--tokens", action="store_true", help="print the token stream instead of running")
     parser.add_argument("--ast", action="store_true", help="print the syntax tree instead of running")

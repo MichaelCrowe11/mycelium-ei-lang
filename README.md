@@ -6,15 +6,7 @@ Mycelium-EI-Lang is a small interpreted language for cultivation models: environ
 
 early stage
 
-0.2.0 is the first version whose `pip install` runs `.myc` programs. Releases 0.1.0 to 0.1.2 installed an interpreter that parsed Python syntax and imported a dependency they did not declare, so `myc examples/hello_world.myc` failed on every clean install.
-
-As of 2026-09-11 the PyPI upload of 0.2.0 is pending an account permission, so `pip install mycelium-ei-lang` still gives 0.1.2. Until it lands, install the 0.2.0 wheel from the GitHub release instead:
-
-```
-pip install https://github.com/MichaelCrowe11/mycelium-ei-lang/releases/download/v0.2.0/mycelium_ei_lang-0.2.0-py3-none-any.whl
-```
-
-This paragraph goes away when PyPI serves 0.2.0.
+0.2.2 is the first release on PyPI that runs `.myc` programs. It is published as **mycelium-ei-language**. The older PyPI project `mycelium-ei-lang` (0.1.0 to 0.1.2) belongs to an account whose two-factor device was lost with a laptop, so it cannot be updated; its interpreter parsed Python syntax and imported a dependency it did not declare, and `myc examples/hello_world.myc` fails on every install of it. Do not install `mycelium-ei-lang`.
 
 What does not work yet:
 
@@ -31,14 +23,14 @@ Run on 2026-09-11 with CPython 3.13.14 on macOS.
 ```
 python3 -m venv .venv
 . .venv/bin/activate
-pip install mycelium-ei-lang
+pip install mycelium-ei-language
 myc --version
 ```
 
 Output:
 
 ```
-mycelium-ei-lang 0.2.0
+mycelium-ei-language 0.2.2
 ```
 
 Save this as `hello.myc`:

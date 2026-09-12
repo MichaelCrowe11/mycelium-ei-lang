@@ -6,7 +6,7 @@ functions, and call genetic, particle swarm and ant colony optimizers.
 Copyright (c) 2024-2026 Michael Benjamin Crowe. Proprietary; see LICENSE.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.2"
 __author__ = "Michael Benjamin Crowe"
 __license__ = "Proprietary"
 

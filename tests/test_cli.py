@@ -15,13 +15,13 @@ def myc(*args, stdin=None):
 def test_version_flag():
     result = myc("--version")
     assert result.returncode == 0
-    assert result.stdout.strip() == f"mycelium-ei-lang {mycelium_ei.__version__}"
+    assert result.stdout.strip() == f"mycelium-ei-language {mycelium_ei.__version__}"
 
 
 def test_installed_metadata_version_matches_package():
     try:
         from importlib.metadata import version
-        installed = version("mycelium-ei-lang")
+        installed = version("mycelium-ei-language")
     except Exception:  # noqa: BLE001 - not installed in this environment
         pytest.skip("package not installed")
     assert installed == mycelium_ei.__version__

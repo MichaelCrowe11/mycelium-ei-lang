@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.2.2 (2026-09-11)
+
+First release on PyPI, published as `mycelium-ei-language`.
+
+### Changed
+
+- The distribution is renamed from `mycelium-ei-lang` to `mycelium-ei-language`.
+  The PyPI project `mycelium-ei-lang` belongs to an account whose two-factor
+  device and email were lost with a laptop, so it cannot receive releases and
+  its 0.1.x uploads stay broken. The import name `mycelium_ei`, the `myc` and
+  `mycelium` commands and the repository name are unchanged. `myc --version`
+  prints the distribution name: `mycelium-ei-language 0.2.2`.
+
+## 0.2.1 (2026-09-11)
+
+The license fix release, and the first version uploaded to PyPI. 0.2.0 was
+published only as a GitHub release (tag v0.2.0) while the PyPI upload waited
+on an account permission; it never reached PyPI.
+
+### Fixed
+
+- Every surface now says proprietary. `compiler/Cargo.toml` claimed
+  Apache-2.0 and `vscode-extension/package.json` claimed MIT; both point at
+  the one `LICENSE` now. Two marketing drafts called the language open
+  source and the Solidity template header said MIT.
+- `LICENSE` had a placeholder contact (`michael.benjamin.crowe@[domain]`) and
+  a support address on a domain that does not resolve. It now gives
+  michael@crowelogic.com and the GitHub issue tracker, and the copyright
+  year covers 2024-2026.
+
 ## 0.2.0 (2026-09-11)
 
 The first release whose `pip install` runs the documented language.
